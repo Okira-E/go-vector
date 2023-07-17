@@ -129,3 +129,8 @@ func (v *Vec[T]) Reverse() *Vec[T] {
 
 	return v
 }
+
+// ToSlice returns the vector as a slice.
+func (v *Vec[T]) ToSlice() []T {
+	return v.data
+}
