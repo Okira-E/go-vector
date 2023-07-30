@@ -2,12 +2,12 @@ package main
 
 import "errors"
 
-type Vec[T any] struct {
+type Vec[T comparable] struct {
 	data []T
 }
 
 // NewVec returns a new vector with the given data.
-func NewVec[T any](data ...T) *Vec[T] {
+func NewVec[T comparable](data ...T) *Vec[T] {
 	v := Vec[T]{}
 
 	for _, val := range data {
@@ -48,6 +48,16 @@ func (v *Vec[T]) Push(val T) {
 	v.data = append(v.data, val)
 }
 
+// Remove removes the value from the vector.
+func (v *Vec[T]) Remove(val T) {
+	for i, _v := range v.data {
+		if _v == val {
+			v.data = append(v.data[:i], v.data[i+1:]...)
+			break
+		}
+	}
+}
+
 // Pop removes the last value from the vector and returns it.
 func (v *Vec[T]) Pop() T {
 	last := v.data[len(v.data)-1]
@@ -81,7 +91,7 @@ func (v *Vec[T]) ForEach(cb func(int, T)) {
 }
 
 // Map iterates over the vector and calls the callback function for each value.
-// The callback function should return the new value of any type based on the current value.
+// The callback function should return the new value of comparable type based on the current value.
 // It returns a new vector with the new values.
 func (v *Vec[T]) Map(cb func(int, T) T) *Vec[T] {
 	newData := make([]T, len(v.data))
